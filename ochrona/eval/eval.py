@@ -20,7 +20,10 @@ def resolve(logger: OchronaLogger, dependencies=[], policies=[]) -> DependencySe
     resp = DependencySet([Dependency(dep) for dep in dependencies])
     vulns = []
     for dep in resp.flat_list:
-        vulns += db.lookup_by_name(_safe_query_name(dep))
+        try:
+            vulns += db.lookup_by_name(_safe_query_name(dep))
+        except:
+            pass
 
     if vulns:
         resp.confirmed_vulnerabilities = evaluate(vulns, resp.flat_list)
